@@ -73,9 +73,18 @@ main {
     cursor: pointer;
 }
 
+.square.bomb.clicked{
+    background-color: red;
+    color: white;
+}
+
 .square.clicked {
     background-color: #6495ED;
     color: white;
+}
+
+.result {
+    margin-top: 20px;
 }
 
 footer {

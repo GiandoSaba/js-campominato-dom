@@ -9,13 +9,30 @@
 const playButton = document.getElementById('play-button');
 const select = document.getElementById('difficulty-select');
 const grid = document.getElementById('grid');
-let width = `calc(100% / 10)`;
-let height = `calc(100% / 10)`;
-let numberSquare = 100;
+let width = '';
+let height = '';
+let numberSquare = 0;
 
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+}
 
+function createBombArray(numSquare){
+    const bombArray = [];
+    for (let i = 0; i < 16; i++) {
+        let number = getRandomIntInclusive(1,numSquare);
+        while (bombArray.includes(number)) {
+            number = getRandomIntInclusive(1, numSquare);
+        }
+        bombArray.push(number);
+    }
 
-select.addEventListener('change', function () {
+    return bombArray;
+}
+
+function selectChoice() {
     const selectValue = select.value;
     let row = 0;
     let col = 0;
@@ -33,34 +50,51 @@ select.addEventListener('change', function () {
             col = 7;
             break;
     }
-    
+
     width = `calc(100% / ${col})`;
     height = `calc(100% / ${row})`;
-    numberSquare = col * row;    
-});
-            
-                   
-            
-            
-playButton.addEventListener('click', function () {
+    numberSquare = col * row;
+}
+
+function playButtonFunction(){
+    selectChoice();
     let point = 0;
+    const bombArray = createBombArray(numberSquare);
+    console.log(bombArray);
     grid.innerHTML = '';
 
     for (let i = 0; i < numberSquare; i++) {
         const square = document.createElement('div');
         square.classList.add('square');
-        square.append(i+1);
+        square.append(i + 1);
+        if (bombArray.includes(i + 1)) {
+            square.classList.add('bomb');
+        }
         square.style.width = width;
         square.style.height = height;
         grid.append(square);
-        
-        square.addEventListener('click', function() {
-            if (!this.classList.contains('clicked')) {
+
+        square.addEventListener('click', function () {
+            if (!this.classList.contains('clicked') && !this.classList.contains('bomb')) {
                 this.classList.add('clicked');
                 point += 1;
-                console.log(point);
+                if (point == numberSquare - bombArray.length) {
+                    const result = `<h2 class="result"> HAI VINTO. Totale punti: ${point}`;
+                    grid.innerHTML += result;
+                }
+                
+            } else if (this.classList.contains('bomb')) {
+                const bombs = document.querySelectorAll('.bomb');
+                for (let i = 0; i < bombs.length; i++) {
+                    bombs[i].classList.add('clicked');
+                }
+                const result = `<h2 class="result"> HAI PERSO. Totale punti: ${point}`;
+                grid.innerHTML += result;
             }
-        }); 
+        });
     }
+}
 
-});
+select.addEventListener('change', selectChoice);
+                     
+playButton.addEventListener('click', playButtonFunction);
