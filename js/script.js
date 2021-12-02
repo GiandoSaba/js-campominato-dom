@@ -12,6 +12,7 @@ const grid = document.getElementById('grid');
 let width = '';
 let height = '';
 let numberSquare = 0;
+const bombNumber = 16;
 
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
@@ -21,7 +22,7 @@ function getRandomIntInclusive(min, max) {
 
 function createBombArray(numSquare){
     const bombArray = [];
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < bombNumber; i++) {
         let number = getRandomIntInclusive(1,numSquare);
         while (bombArray.includes(number)) {
             number = getRandomIntInclusive(1, numSquare);
@@ -78,7 +79,7 @@ function playButtonFunction(){
             if (!this.classList.contains('clicked') && !this.classList.contains('bomb')) {
                 this.classList.add('clicked');
                 point += 1;
-                if (point == numberSquare - bombArray.length) {
+                if (point == numberSquare - bombNumber) {
                     const result = `<h2 class="result"> HAI VINTO. Totale punti: ${point}`;
                     grid.innerHTML += result;
                 }
@@ -94,7 +95,5 @@ function playButtonFunction(){
         });
     }
 }
-
-select.addEventListener('change', selectChoice);
                      
 playButton.addEventListener('click', playButtonFunction);
