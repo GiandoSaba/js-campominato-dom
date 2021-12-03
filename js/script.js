@@ -68,29 +68,32 @@ function playButtonFunction(){
         const square = document.createElement('div');
         square.classList.add('square');
         square.append(i + 1);
-        if (bombArray.includes(i + 1)) {
-            square.classList.add('bomb');
-        }
+        // if (bombArray.includes(i + 1)) {
+        //     square.classList.add('bomb');
+        // }
         square.style.width = width;
         square.style.height = height;
         grid.append(square);
 
         square.addEventListener('click', function () {
-            if (!this.classList.contains('clicked') && !this.classList.contains('bomb')) {
+            const numSquare = parseInt(this.innerText);
+            if (bombArray.includes(numSquare)) {
+                const allSquare = document.querySelectorAll('.square');
+                for (let i = 0; i < allSquare.length; i++) {
+                    if (bombArray.includes(parseInt(allSquare[i].innerText))) {
+                        allSquare[i].classList.add('bomb');
+                        allSquare[i].classList.add('clicked');
+                    } 
+                }
+                const result = `<h2 class="result"> HAI PERSO. Totale punti: ${point}</h2>`;
+                grid.innerHTML += result;
+            } else if (!this.classList.contains('clicked') && !this.classList.contains('bomb')) {
                 this.classList.add('clicked');
                 point += 1;
                 if (point == numberSquare - bombNumber) {
-                    const result = `<h2 class="result"> HAI VINTO. Totale punti: ${point}`;
+                    const result = `<h2 class="result"> HAI VINTO. Totale punti: ${point}</h2>`;
                     grid.innerHTML += result;
                 }
-                
-            } else if (this.classList.contains('bomb')) {
-                const bombs = document.querySelectorAll('.bomb');
-                for (let i = 0; i < bombs.length; i++) {
-                    bombs[i].classList.add('clicked');
-                }
-                const result = `<h2 class="result"> HAI PERSO. Totale punti: ${point}`;
-                grid.innerHTML += result;
             }
         });
     }
