@@ -15,6 +15,30 @@ const playButton = document.getElementById('play-button');
 const select = document.getElementById('difficulty-select');
 const grid = document.getElementById('grid');
 
+function selectChoice() {
+    const selectValue = select.value;
+    let row = 0;
+    let col = 0;
+    switch (selectValue) {
+        case 'easy':
+            row = 10;
+            col = 10;
+            break;
+        case 'medium':
+            row = 9;
+            col = 9;
+            break;
+        case 'hard':
+            row = 7;
+            col = 7;
+            break;
+    }
+
+    width = `calc(100% / ${col})`;
+    height = `calc(100% / ${row})`;
+    numberSquare = col * row;
+}
+
 function playButtonFunction(){
     let width = '';
     let height = '';
@@ -76,29 +100,7 @@ function playButtonFunction(){
         return bombArray;
     }
     
-    function selectChoice() {
-        const selectValue = select.value;
-        let row = 0;
-        let col = 0;
-        switch (selectValue) {
-            case 'easy':
-                row = 10;
-                col = 10;
-                break;
-            case 'medium':
-                row = 9;
-                col = 9;
-                break;
-            case 'hard':
-                row = 7;
-                col = 7;
-                break;
-        }
-    
-        width = `calc(100% / ${col})`;
-        height = `calc(100% / ${row})`;
-        numberSquare = col * row;
-    }
 }
-                     
+
 playButton.addEventListener('click', playButtonFunction);
+select.addEventListener('change', selectChoice);
